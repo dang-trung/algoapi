@@ -11,14 +11,20 @@ class BaseClient:
 
     def _request(
         self,
-        method,
-        endpoint,
-        params=None,
-        data=None,
+        method: str,
+        endpoint: str,
+        params: dict = None,
+        data: dict = None,
+        headers: dict = None
     ) -> dict:
+        headers = self._merge_headers(headers)
 
         r = self.client.request(
-            method=method, url=self.BASE + endpoint, params=params, data=data
+            method=method,
+            url=self.BASE + endpoint,
+            params=params,
+            data=data,
+            headers=headers,
         )
 
         try:
@@ -28,11 +34,11 @@ class BaseClient:
             print('status code:', r.status_code)
             print('error:', e)
 
-    def _get(self, endpoint, params=None) -> dict:
-        return self._request('GET', endpoint, params=params)
+    def _get(self, endpoint, params: dict = None, headers: dict = None) -> dict:
+        return self._request('GET', endpoint, params=params, headers=headers)
 
-    def _post(self, endpoint, data=None):
-        return self._request('POST', endpoint, data=data)
+    def _post(self, endpoint, data: dict = None, headers: dict = None) -> dict:
+        return self._request('POST', endpoint, data=data, headers=headers)
 
     def _params(self, fn, caller_locals: dict) -> dict:
         params = {}
@@ -50,6 +56,12 @@ class BaseClient:
             params[arg] = val
 
         return params
+
+    def _merge_headers(self, headers: dict = None) -> dict:
+        return {
+            **headers,
+            **self.client.headers
+        } if headers else self.client.headers
 
     @staticmethod
     def _snake_to_camel(snake_str: str) -> str:
