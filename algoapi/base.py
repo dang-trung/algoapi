@@ -1,5 +1,6 @@
 import datetime as dt
 import inspect
+import json
 
 import requests
 
@@ -38,7 +39,13 @@ class BaseClient:
         return self._request('GET', endpoint, params=params, headers=headers)
 
     def _post(self, endpoint, data: dict = None, headers: dict = None) -> dict:
-        return self._request('POST', endpoint, data=data, headers=headers)
+        post_headers = {'Content-Type': 'application/json'}
+        data = json.dumps(data)
+
+        if headers:
+            post_headers = post_headers | headers
+
+        return self._request('POST', endpoint, data=data, headers=post_headers)
 
     def _params(self, fn, caller_locals: dict) -> dict:
         params = {}
