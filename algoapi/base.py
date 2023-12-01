@@ -22,7 +22,7 @@ class BaseClient:
 
         r = self.client.request(
             method=method,
-            url=self.BASE + endpoint,
+            url=self.base_url + endpoint,
             params=params,
             data=data,
             headers=headers,
