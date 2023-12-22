@@ -28,7 +28,6 @@ class FilterClient(BaseClient):
         return self._get(endpoint=endpoint, headers=headers)
 
     def get_filter_by_id(self, filter_id: str):
-        # print(self.get_all_filters())
         filter = [
             f for f in self.get_all_filters()['data']
             if f['FilterId'] == int(filter_id)

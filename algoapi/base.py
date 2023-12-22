@@ -16,7 +16,7 @@ class BaseClient:
         endpoint: str,
         params: dict = None,
         data: dict = None,
-        headers: dict = None
+        headers: dict = None,
     ) -> dict:
         headers = self._merge_headers(headers)
 
@@ -27,6 +27,12 @@ class BaseClient:
             data=data,
             headers=headers,
         )
+
+        if self.verbose:
+            log = f'{method} {r.url}'
+            if (method == 'GET' and params) or (method == 'POST' and data):
+                log = f'{log} {params or data}'
+            print(log)
 
         try:
             return r.json()
