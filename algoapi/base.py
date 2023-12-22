@@ -7,7 +7,7 @@ import requests
 
 class BaseClient:
 
-    def __init__(self, ) -> None:
+    def __init__(self) -> None:
         self.client = requests.Session()
 
     def _request(
