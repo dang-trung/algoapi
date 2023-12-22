@@ -15,7 +15,6 @@ pandas = "^2.1.4"
 
 [tool.pytest.ini_options]
 addopts = "-vv -s --no-header -q"
-# filterwarnings = "ignore::FutureWarning"
 
 [tool.yapf]
 based_on_style = "facebook"
