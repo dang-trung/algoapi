@@ -1,8 +1,13 @@
 from algoapi.filter import FilterClient
 from algoapi.signal import SignalClient
+from algoapi.tradingview import TradingViewClient
 
 
-class AlgoAPI(FilterClient, SignalClient):
+class AlgoAPI(
+    FilterClient,
+    SignalClient,
+    TradingViewClient,
+):
 
     def __init__(
         self,
