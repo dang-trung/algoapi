@@ -1,10 +1,16 @@
+from collections import namedtuple
+
 import pandas as pd
 
+# Multiple Envs Testing
+Envs = namedtuple('Envs', ['prod', 'uat'])
 
+
+# Check Identical Response Data
 def check_identical(resps):
     for resp in resps:
         resp.columns = resp.columns.str.lower()
-
+    print(resps.prod)
     if not resps.prod.equals(resps.uat):
         print('[NOT IDENTICAL]')
 

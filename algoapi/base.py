@@ -32,8 +32,8 @@ class BaseClient:
 
         if self.verbose:
             log = f'{method} {r.url}'
-            if (method == 'GET' and params) or (method == 'POST' and data):
-                log = f'{log} {params or data}'
+            if (method == 'POST' and data):
+                log = f'{log} {data}'
             print(log)
 
         try:

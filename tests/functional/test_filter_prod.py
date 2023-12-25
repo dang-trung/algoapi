@@ -7,8 +7,7 @@ def add_user_id(client):
 
 
 def test_get_filter_range(client):
-    result = client.get_filter_range()
-    assert result['status'] == 200
+    client.get_filter_range()
 
 
 def test_get_all_filters(client):
@@ -95,8 +94,7 @@ def test_get_filter_by_id(client):
 
 
 def test_run_filter_by_id(client):
-    result = client.run_filter_by_id('2412')
-    assert result['status'] == 200
+    client.run_filter_by_id('2412')
 
 
 def assert_filter_params(

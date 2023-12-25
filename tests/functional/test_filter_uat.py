@@ -1,8 +1,7 @@
 import pandas as pd
 import pytest
 
-from tests.functional.conftest import Envs
-from tests.functional.utils import check_identical
+from tests.functional.utils import Envs, check_identical
 
 
 @pytest.fixture(scope='session', autouse=True)
