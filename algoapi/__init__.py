@@ -1,7 +1,8 @@
 from algoapi.filter import FilterClient
+from algoapi.signal import SignalClient
 
 
-class AlgoAPI(FilterClient):
+class AlgoAPI(FilterClient, SignalClient):
 
     def __init__(
         self,
