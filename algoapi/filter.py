@@ -10,19 +10,16 @@ class FilterClient(BaseClient):
         super().__init__()
         self.user_id = None
 
-    def set_user_id(self, user_id: str) -> None:
-        self.user_id = user_id
-
     def get_filter_range(self):
         endpoint = '/pbapi/api/getFilterRange'
 
         return self._get(endpoint=endpoint)
 
     def get_all_filters(self):
-        endpoint = '/pbapi/api/getFilters'
-        if not (self.user_id or isinstance(self.user_id, str)):
+        if not isinstance(self.user_id, str):
             raise FilterError(self.user_id)
 
+        endpoint = '/pbapi/api/getFilters'
         headers = {'X-USERNAME': self.user_id}
 
         return self._get(endpoint=endpoint, headers=headers)
@@ -88,11 +85,12 @@ class FilterClient(BaseClient):
         )
 
     def delete_filter(self, filter_id: str):
-        endpoint = '/pbapi/api/deleteFilter'
-        if not (self.user_id or isinstance(self.user_id, str)):
+        if not isinstance(self.user_id, str):
             raise FilterError(self.user_id)
 
+        endpoint = '/pbapi/api/deleteFilter'
         headers = {'X-USERNAME': self.user_id}
+
         return self._post(
             endpoint=endpoint,
             headers=headers,
@@ -109,10 +107,10 @@ class FilterClient(BaseClient):
         filter_id: str = '8386',
         name: str = '',
     ):
-        endpoint = '/pbapi/api/filter'
-        if not (self.user_id or isinstance(self.user_id, str)):
+        if not isinstance(self.user_id, str):
             raise FilterError(self.user_id)
 
+        endpoint = '/pbapi/api/filter'
         headers = {'X-USERNAME': self.user_id}
         params = self._params(self._filter, locals())
 

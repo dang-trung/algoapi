@@ -11,3 +11,6 @@ class AlgoAPI(FilterClient):
         super().__init__()
         self.base_url = base_url
         self.verbose = verbose
+
+    def set_user_id(self, user_id: str) -> None:
+        self.user_id = user_id

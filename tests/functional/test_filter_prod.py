@@ -3,19 +3,19 @@ import pytest
 
 @pytest.fixture(scope='session', autouse=True)
 def add_user_id(client):
-    client.set_user_id('130192')
+    client.set_user_id('230992')
 
 
 def test_get_filter_range(client):
-    print('\n', client.get_filter_range())
+    result = client.get_filter_range()
+    assert result['status'] == 200
 
 
 def test_get_all_filters(client):
-    print('\n', client.get_all_filters())
+    print(client.get_all_filters())
 
 
 def test_create_update_delete_filter(client):
-    print('\n')
     # get all filter_id pre-add
     ori_filter_ids = [
         str(f['FilterId']) for f in client.get_all_filters()['data']
@@ -49,16 +49,11 @@ def test_create_update_delete_filter(client):
 
     # try update filter params
     selected_id = filter_ids[-1]
-    print(
-        f'Pre-update filter w/ id {selected_id}:',
-        client.get_filter_by_id(filter_id=selected_id)
-    )
-
+    ori_filter = client.get_filter_by_id(filter_id=selected_id)
+    print(f'Pre-update filter w/ id {selected_id}:', ori_filter)
     client.update_filter(
         filter_id=selected_id,
         name='RENAMED TEST',
-        exchange='HOSE',
-        industry='',
         filter=[
             {
                 'code': 'MC',
@@ -70,12 +65,15 @@ def test_create_update_delete_filter(client):
                 'high': 100
             }
         ],
+        exchange='HOSE',
+        industry='',
     )
     filter = client.get_filter_by_id(filter_id=selected_id)
     print(f'Post-update filter w/ id {selected_id}:', filter)
-
     # check if the filter's exchange got updated or not
-    assert filter['exchange'] == 'HOSE'
+    assert_filter_params(
+        filter=filter, exchange='HOSE', mc_high=1000, p_per_max52w_low=95
+    )
 
     # delete filter_id just added for testing
     client.delete_filter(filter_id=selected_id)
@@ -90,11 +88,24 @@ def test_create_update_delete_filter(client):
 
 
 def test_get_filter_by_id(client):
-    filter = client.get_filter_by_id('2353')
+    filter = client.get_filter_by_id('2412')
     assert isinstance(filter, dict)
     for k in ['filter_id', 'name', 'exchange', 'industry', 'filter']:
         assert k in filter.keys()
 
 
 def test_run_filter_by_id(client):
-    print(client.run_filter_by_id('2353'))
+    result = client.run_filter_by_id('2412')
+    assert result['status'] == 200
+
+
+def assert_filter_params(
+    filter: dict, exchange: str, mc_high: float, p_per_max52w_low: float
+):
+    assert filter['exchange'] == exchange
+    mc_filter = [c for c in filter['filter'] if c['code'] == 'MC'][0]
+    assert mc_filter['high'] == mc_high
+    p_per_max52w_filter = [
+        c for c in filter['filter'] if c['code'] == 'P_PER_MAX_52W'
+    ][0]
+    assert p_per_max52w_filter['low'] == p_per_max52w_low
