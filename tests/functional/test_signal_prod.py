@@ -6,8 +6,8 @@ def add_user_id(client):
     client.set_user_id('230992')
 
 
-def test_get_formula(client):
-    client.get_formula()
+def test_get_formula_signal(client):
+    client.get_formula_signal()
 
 
 def test_get_signals(client):
