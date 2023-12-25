@@ -6,7 +6,7 @@ class SignalClient(BaseClient):
     def __init__(self) -> None:
         super().__init__()
 
-    def get_formula(self):
+    def get_formula_signal(self):
         endpoint = '/pbapi/api/formula'
 
         return self._get(endpoint=endpoint)
