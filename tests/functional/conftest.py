@@ -10,7 +10,7 @@ def client():
 
 @pytest.fixture(autouse=True)
 def print_new_line():
-    print('\n')
+    print()
 
 
 # Multiple Envs Testing

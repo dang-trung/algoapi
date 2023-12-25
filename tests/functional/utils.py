@@ -29,5 +29,3 @@ def check_identical(resps):
             )
     else:
         print('[IDENTICAL]')
-
-    print()

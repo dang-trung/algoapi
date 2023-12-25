@@ -7,8 +7,7 @@ from tests.functional.utils import check_identical
 
 @pytest.fixture(scope='session', autouse=True)
 def add_user_id(clients):
-    clients.prod.set_user_id('130192')
-    clients.uat.set_user_id('230992')
+    [client.set_user_id('230992') for client in clients]
 
 
 def test_get_filter_range(clients):

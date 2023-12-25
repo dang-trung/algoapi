@@ -4,6 +4,8 @@ import json
 
 import requests
 
+from algoapi.exceptions import APIError
+
 
 class BaseClient:
 
@@ -35,7 +37,10 @@ class BaseClient:
             print(log)
 
         try:
-            return r.json()
+            if r.status_code == 200:
+                return r.json()
+            else:
+                raise APIError(r)
         except Exception as e:
             print('url:', r.url)
             print('status code:', r.status_code)
@@ -80,4 +85,6 @@ class BaseClient:
     def _snake_to_camel(snake_str: str) -> str:
         comp = snake_str.split('_')
 
-        return comp[0].lower() + ''.join(c.title() for c in comp[1:])
+        camel_str = (comp[0].lower() + ''.join([c.title() for c in comp[1:]]))
+
+        return camel_str.replace('Id', 'ID')
