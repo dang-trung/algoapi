@@ -1,7 +1,7 @@
 from algoapi import AlgoAPI
 
 client = AlgoAPI()
-client.set_user_id('130192')
+client.set_user_id('230992')
 
 # get all filter_id pre-add
 ori_filter_ids = [str(f['FilterId']) for f in client.get_all_filters()['data']]

@@ -1,7 +1,7 @@
 from algoapi import AlgoAPI
 
 client = AlgoAPI()
-client.set_user_id('130192')
+client.set_user_id('230992')
 
 # run a filter without saving
 sec_codes = [
