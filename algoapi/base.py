@@ -43,20 +43,32 @@ class BaseClient:
                 raise APIError(r)
         except Exception as e:
             print('url:', r.url)
-            print('status code:', r.status_code)
             print('error:', e)
 
     def _get(self, endpoint, params: dict = None, headers: dict = None) -> dict:
         return self._request('GET', endpoint, params=params, headers=headers)
 
-    def _post(self, endpoint, data: dict = None, headers: dict = None) -> dict:
+    def _post(
+        self,
+        endpoint,
+        params: dict = None,
+        data: dict = None,
+        headers: dict = None
+    ) -> dict:
         post_headers = {'Content-Type': 'application/json'}
         data = json.dumps(data)
 
         if headers:
             post_headers = post_headers | headers
 
-        return self._request('POST', endpoint, data=data, headers=post_headers)
+        return self._request(
+            'POST', endpoint, params=params, data=data, headers=post_headers
+        )
+
+    def _delete(
+        self, endpoint, params: dict = None, headers: dict = None
+    ) -> dict:
+        return self._request('DELETE', endpoint, params=params, headers=headers)
 
     def _params(self, fn, caller_locals: dict) -> dict:
         params = {}
