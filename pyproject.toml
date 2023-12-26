@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyalgoapi"
-version = "1.0.0"
+version = "1.0.1"
 description = "Python Wrapper for BSC Algo API"
 authors = ["Trung Dang <trungd@bsc.com.vn>"]
 packages = [{ include = "algoapi" }, { include = "examples" }]
