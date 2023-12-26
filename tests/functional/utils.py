@@ -1,3 +1,4 @@
+import datetime as dt
 from collections import namedtuple
 
 import pandas as pd
@@ -10,9 +11,13 @@ Envs = namedtuple('Envs', ['prod', 'uat'])
 def check_identical(resps):
     for resp in resps:
         resp.columns = resp.columns.str.lower()
-    print(resps.prod)
+
     if not resps.prod.equals(resps.uat):
         print('[NOT IDENTICAL]')
+        print('[PROD]')
+        print(resps.prod)
+        print('[UAT]')
+        print(resps.uat)
 
         merged = pd.concat(resps)
         dup_rows = merged[merged.duplicated(keep=False)]
@@ -35,3 +40,21 @@ def check_identical(resps):
             )
     else:
         print('[IDENTICAL]')
+
+
+def check_identical_dict(resps):
+    if not resps.prod == resps.uat:
+        print('[NOT IDENTICAL]')
+        print('[PROD]')
+        print(resps.prod)
+        print('[UAT]')
+        print(resps.uat)
+    else:
+        print('[IDENTICAL]')
+
+
+# Convert timestamp to datetime
+def ts_to_dt(timestamp: int):
+    if isinstance(timestamp, int):
+        return dt.datetime.fromtimestamp(timestamp)
+    return timestamp
