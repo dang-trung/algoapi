@@ -1,7 +1,10 @@
 import datetime as dt
 import inspect
+import json
 
 import requests
+
+from algoapi.exceptions import APIError
 
 
 class BaseClient:
@@ -11,28 +14,61 @@ class BaseClient:
 
     def _request(
         self,
-        method,
-        endpoint,
-        params=None,
-        data=None,
+        method: str,
+        endpoint: str,
+        params: dict = None,
+        data: dict = None,
+        headers: dict = None,
     ) -> dict:
+        headers = self._merge_headers(headers)
 
         r = self.client.request(
-            method=method, url=self.BASE + endpoint, params=params, data=data
+            method=method,
+            url=self.base_url + endpoint,
+            params=params,
+            data=data,
+            headers=headers,
         )
 
+        if self.verbose:
+            log = f'{method} {r.url}'
+            if (method == 'POST' and data):
+                log = f'{log} {data}'
+            print(log)
+
         try:
-            return r.json()
+            if r.status_code == 200:
+                return r.json()
+            else:
+                raise APIError(r)
         except Exception as e:
             print('url:', r.url)
-            print('status code:', r.status_code)
             print('error:', e)
 
-    def _get(self, endpoint, params=None) -> dict:
-        return self._request('GET', endpoint, params=params)
+    def _get(self, endpoint, params: dict = None, headers: dict = None) -> dict:
+        return self._request('GET', endpoint, params=params, headers=headers)
 
-    def _post(self, endpoint, data=None):
-        return self._request('POST', endpoint, data=data)
+    def _post(
+        self,
+        endpoint,
+        params: dict = None,
+        data: dict = None,
+        headers: dict = None
+    ) -> dict:
+        post_headers = {'Content-Type': 'application/json'}
+        data = json.dumps(data)
+
+        if headers:
+            post_headers = post_headers | headers
+
+        return self._request(
+            'POST', endpoint, params=params, data=data, headers=post_headers
+        )
+
+    def _delete(
+        self, endpoint, params: dict = None, headers: dict = None
+    ) -> dict:
+        return self._request('DELETE', endpoint, params=params, headers=headers)
 
     def _params(self, fn, caller_locals: dict) -> dict:
         params = {}
@@ -51,8 +87,16 @@ class BaseClient:
 
         return params
 
+    def _merge_headers(self, headers: dict = None) -> dict:
+        return {
+            **headers,
+            **self.client.headers
+        } if headers else self.client.headers
+
     @staticmethod
     def _snake_to_camel(snake_str: str) -> str:
         comp = snake_str.split('_')
 
-        return comp[0].lower() + ''.join(c.title() for c in comp[1:])
+        camel_str = (comp[0].lower() + ''.join([c.title() for c in comp[1:]]))
+
+        return camel_str.replace('Id', 'ID')
