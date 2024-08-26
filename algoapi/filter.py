@@ -112,6 +112,9 @@ class FilterClient(BaseClient):
 
         endpoint = '/pbapi/api/filter'
         headers = {'X-USERNAME': self.user_id}
-        params = self._params(self._filter, locals())
+        params = {'userID': self.user_id}
+        data = self._params(self._filter, locals())
 
-        return self._post(endpoint=endpoint, headers=headers, data=params)
+        return self._post(
+            endpoint=endpoint, data=data, headers=headers, params=params
+        )
